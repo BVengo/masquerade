@@ -1,0 +1,23 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Test and lint caches
+.pytest_cache/
+.ruff_cache/
+
+# OS garbage
+.DS_Store
+Thumbs.db
+
+# IDE files - should probably allow
+# some of this eventually.
+.vscode/
+.idea/

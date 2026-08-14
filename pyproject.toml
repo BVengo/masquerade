@@ -1,0 +1,56 @@
+[project]
+name = "masquerade"
+version = "0.1.0"
+description = "A library for checking and preventing file-spoofing attacks."
+readme = "README.md"
+license = "LGPL-3.0-or-later"
+license-files = ["LICENSE.md"]
+requires-python = ">=3.10"
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/BVengo/masquerade"
+Issues = "https://github.com/BVengo/masquerade/issues"
+Funding = "https://ko-fi.com/bvengo"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.3",
+    "twine>=7.0.0",
+]
+test = [
+    "pytest>=9.1.1",
+]
+
+[project.scripts]
+masquerade = "masquerade.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.4,<0.13"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers"]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 79
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "COM812", # Conflicts with the formatter.
+    "CPY001", # The project-level LICENSE.md is the copyright notice.
+    "D203",   # Incompatible with D211.
+    "D213",   # Incompatible with D212.
+    "EM101",  # Local exception messages are clearer than module constants.
+    "EM102",  # Local exception messages are clearer than module constants.
+    "ISC001", # Conflicts with the formatter.
+    "PLR2004", # Binary format specifications use meaningful numeric constants.
+    "TRY003", # Built-in parse errors do not need custom exception classes.
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/masquerade/cli.py" = ["T201"] # CLI usage belongs on standard output.
+"tests/**" = ["INP001", "S101"] # Tests are not a package and use pytest asserts.
