@@ -8,6 +8,33 @@
 A package that will do some brief checks to verify that provided files match
 their expected file structure, to prevent spoofing or uploading of invalid files.
 
+## Usage
+
+Use `check_file` when only boolean outcomes are needed:
+
+```python
+from masquerade import check_file
+
+magic, detailed = check_file("upload.jpg")
+```
+
+Use `inspect_file` when the caller needs to decide how to report a failure:
+
+```python
+import logging
+
+from masquerade import inspect_file
+
+result = inspect_file("upload.jpg")
+if result.valid is False:
+    failure = result.detailed or result.magic
+    logging.getLogger(__name__).info(
+        "Rejected upload (%s): %s", failure.code, failure.reason
+    )
+```
+
+Parsers do not log validation failures. Unexpected errors (such as filesystem errors), are still raised rather than reported as invalid media.
+
 ## Development
 
 Masquerade uses [uv](https://docs.astral.sh/uv/). Below are some helpful commands:
