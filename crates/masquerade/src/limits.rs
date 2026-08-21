@@ -6,9 +6,17 @@ const MAX_BUFFER_BYTES: usize = 16 * 1_024 * 1_024;
 /// Resource limits applied while parsing untrusted files.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ValidationLimits {
+    bmp: BmpLimits,
     bmff: BmffLimits,
     riff: RiffLimits,
     mp3: Mp3Limits,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+struct BmpLimits {
+    max_width: u32,
+    max_height: u32,
+    max_pixels: u64,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -33,6 +41,21 @@ impl ValidationLimits {
     #[must_use]
     pub fn builder() -> ValidationLimitsBuilder {
         ValidationLimitsBuilder::default()
+    }
+
+    #[must_use]
+    pub const fn max_bmp_width(&self) -> u32 {
+        self.bmp.max_width
+    }
+
+    #[must_use]
+    pub const fn max_bmp_height(&self) -> u32 {
+        self.bmp.max_height
+    }
+
+    #[must_use]
+    pub const fn max_bmp_pixels(&self) -> u64 {
+        self.bmp.max_pixels
     }
 
     #[must_use]
@@ -69,6 +92,11 @@ impl ValidationLimits {
 impl Default for ValidationLimits {
     fn default() -> Self {
         Self {
+            bmp: BmpLimits {
+                max_width: 32_768,
+                max_height: 32_768,
+                max_pixels: 100_000_000,
+            },
             bmff: BmffLimits {
                 max_boxes: 50,
                 max_ftyp_bytes: 64 * 1_024,
@@ -90,6 +118,24 @@ pub struct ValidationLimitsBuilder {
 }
 
 impl ValidationLimitsBuilder {
+    #[must_use]
+    pub const fn max_bmp_width(mut self, value: u32) -> Self {
+        self.limits.bmp.max_width = value;
+        self
+    }
+
+    #[must_use]
+    pub const fn max_bmp_height(mut self, value: u32) -> Self {
+        self.limits.bmp.max_height = value;
+        self
+    }
+
+    #[must_use]
+    pub const fn max_bmp_pixels(mut self, value: u64) -> Self {
+        self.limits.bmp.max_pixels = value;
+        self
+    }
+
     #[must_use]
     pub const fn max_bmff_boxes(mut self, value: usize) -> Self {
         self.limits.bmff.max_boxes = value;
@@ -134,10 +180,32 @@ impl ValidationLimitsBuilder {
     /// frame requirements internally inconsistent.
     pub fn build(self) -> Result<ValidationLimits, InvalidValidationLimits> {
         let limits = self.limits;
+        limits.bmp.validate()?;
         limits.bmff.validate()?;
         limits.riff.validate()?;
         limits.mp3.validate()?;
         Ok(limits)
+    }
+}
+
+impl BmpLimits {
+    fn validate(&self) -> Result<(), InvalidValidationLimits> {
+        if self.max_width == 0 {
+            return Err(InvalidValidationLimits::new(
+                "max_bmp_width must be greater than zero",
+            ));
+        }
+        if self.max_height == 0 {
+            return Err(InvalidValidationLimits::new(
+                "max_bmp_height must be greater than zero",
+            ));
+        }
+        if self.max_pixels == 0 {
+            return Err(InvalidValidationLimits::new(
+                "max_bmp_pixels must be greater than zero",
+            ));
+        }
+        Ok(())
     }
 }
 
