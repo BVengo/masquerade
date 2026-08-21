@@ -15,6 +15,7 @@ Funding = "https://ko-fi.com/bvengo"
 
 [dependency-groups]
 dev = [
+    "pyright>=1.1.404",
     "ruff>=0.16.3",
     "twine>=7.0.0",
 ]
@@ -23,15 +24,27 @@ test = [
 ]
 
 [project.scripts]
-masquerade = "masquerade.cli:main"
+masquerade = "masquerade:main"
 
 [build-system]
-requires = ["uv_build>=0.12.4,<0.13"]
-build-backend = "uv_build"
+requires = ["maturin>=1.9,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+manifest-path = "bindings/python/Cargo.toml"
+module-name = "masquerade._native"
+python-source = "bindings/python/python"
+features = ["pyo3/extension-module"]
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "--strict-markers"]
-testpaths = ["tests"]
+testpaths = ["bindings/python/tests"]
+
+[tool.pyright]
+include = ["bindings/python/typecheck"]
+extraPaths = ["bindings/python/python"]
+pythonVersion = "3.10"
+typeCheckingMode = "strict"
 
 [tool.ruff]
 target-version = "py310"
@@ -52,5 +65,5 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"src/masquerade/cli.py" = ["T201"] # CLI usage belongs on standard output.
-"tests/**" = ["INP001", "S101"] # Tests are not a package and use pytest asserts.
+"bindings/python/tests/**" = ["INP001", "S101"] # Tests are not a package and use pytest asserts.
+"bindings/python/typecheck/**" = ["INP001"] # Static fixtures are not a package.

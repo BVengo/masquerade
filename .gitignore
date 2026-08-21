@@ -5,6 +5,8 @@ build/
 dist/
 wheels/
 *.egg-info
+bindings/python/python/masquerade/_native*.so
+bindings/python/python/masquerade/_native*.pyd
 
 # Virtual environments
 .venv
@@ -12,6 +14,9 @@ wheels/
 # Test and lint caches
 .pytest_cache/
 .ruff_cache/
+
+# Rust-generated files
+target/
 
 # OS garbage
 .DS_Store

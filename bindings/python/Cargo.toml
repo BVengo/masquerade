@@ -1,0 +1,21 @@
+[package]
+name = "masquerade-python"
+description = "Python bindings for Masquerade"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lib]
+name = "_native"
+crate-type = ["cdylib"]
+
+[dependencies]
+masquerade = { version = "0.1.0", path = "../../crates/masquerade" }
+masquerade-cli = { version = "0.1.0", path = "../../crates/masquerade-cli" }
+pyo3 = { version = "0.29.2", features = ["abi3-py310", "extension-module"] }
+
+[lints]
+workspace = true

@@ -1,0 +1,21 @@
+[workspace]
+members = [
+    "bindings/python",
+    "crates/masquerade",
+    "crates/masquerade-cli",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "LGPL-3.0-or-later"
+repository = "https://github.com/BVengo/masquerade"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"

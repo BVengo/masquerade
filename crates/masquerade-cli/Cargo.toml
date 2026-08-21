@@ -1,0 +1,22 @@
+[package]
+name = "masquerade-cli"
+description = "Command-line media file validation"
+readme = "README.md"
+keywords = ["cli", "file-type", "media", "security", "validation"]
+categories = ["command-line-utilities", "multimedia"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "masquerade"
+path = "src/main.rs"
+doc = false
+
+[dependencies]
+masquerade = { version = "0.1.0", path = "../masquerade" }
+
+[lints]
+workspace = true
