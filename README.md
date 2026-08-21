@@ -6,9 +6,9 @@
 [![License: LGPL-3.0-or-later](https://img.shields.io/badge/License-LGPL--3.0--or--later-blue?style=flat-square)](https://github.com/BVengo/masquerade/blob/main/LICENSE.md)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20me-FF5E5B?style=flat-square&logo=ko-fi&logoColor=white)](https://ko-fi.com/bvengo)
 
-A Rust library, CLI and Python package for checking that media files match their
-declared type by performing bounded signature and structural checks without decoding
-media content.
+A Rust library, CLI, and Python package for checking that structured files match their
+declared type by performing bounded signature and structural checks prior to any full
+loading, decoding, or usage of their contents.
 
 
 ## Examples
